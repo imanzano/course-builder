@@ -285,6 +285,21 @@ class BaseHandler(ApplicationHandler):
         """Get the current user."""
         return users.get_current_user()
 
+    def send_registration_email(self,user):
+
+        mailSender = self.app_context.get_environ()['reg_form']['mail_sender']
+        mailSubject = self.app_context.get_environ()['reg_form']['mail_subject']
+        mailBody = self.app_context.get_environ()['reg_form']['mail_body']
+        mailBodyHtml = self.app_context.get_environ()['reg_form']['mail_body_html']
+        message = mail.EmailMessage(sender=mailSender,
+                            subject=mailSubject)
+
+        message.to = user.email()
+        message.body = mailBody
+        message.html = mailBodyHtml
+
+        message.send()
+
     def personalize_page_and_get_user(self):
         """If the user exists, add personalized fields to the navbar."""
         user = self.get_user()
@@ -495,6 +510,11 @@ class RegisterHandler(BaseHandler):
 
         Student.add_new_student_for_current_user(
             name, transforms.dumps(self.request.POST.items()))
+
+        send_reg_mail = self.app_context.get_environ()['reg_form']['send_registration_mail']
+        if send_reg_mail:
+            self.send_registration_email(user)
+
         # Render registration confirmation page
         self.redirect('/course#registration_confirmation')
 

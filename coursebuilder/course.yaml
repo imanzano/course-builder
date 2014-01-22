@@ -110,6 +110,18 @@ reg_form:
   # Whether to allow new students to register for the course.
   can_register: True
 
+  # enable or disable send email when a new user is enrolled to the course
+  send_registration_mail: True
+  mail_sender: 'you@gmail.com' # this is the email that you are using in GAE
+  mail_subject: 'Welcome'
+  mail_body: 'Hi, Thanks for registering to our Course.'
+  mail_body_html: '<html><head></head><body>
+        Hi,
+
+        Thanks for registering to our Course.
+
+        The Team
+        </body></html>'
 
 ##############################
 # Assessment confirmation page
